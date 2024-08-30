@@ -103,10 +103,15 @@ def logout():
 def register():
     if request.method == 'POST':
         # add the new user's information to the database
-        new_user = User(username=request.form['username'], password=request.form['password'])
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect('/login')
+        username = request.form['username']
+        user = db.session.query(User).filter_by(username=username).first()
+        if user:
+             return render_template("register.html", msg = 'usuario ja existe')
+        else:
+            new_user = User(username=request.form['username'], password=request.form['password'])
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect('/login')
     else:
         return render_template('register.html')
 
@@ -291,12 +296,12 @@ def delete_negociacao(id):
 
 if __name__ == '__main__':
     with app.app_context():
-        """db.create_all()
+        db.create_all()
         try:
            db.drop_all()
            db.create_all()
         except:
-            db.session.rollback()"""   
+            db.session.rollback() 
        
     app.run(debug=True)
 
