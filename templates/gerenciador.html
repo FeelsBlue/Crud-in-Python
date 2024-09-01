@@ -1,113 +1,165 @@
-<html>
-    <head>
-        <title>Menu Principal</title>
-    </head>
-    <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Principal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #FFC107;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .container h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .container form {
+            margin-bottom: 15px;
+        }
+        .container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #FFC107;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .container input[type="submit"]:hover {
+            background-color: #e6a50a;
+        }
+        .container .message {
+            color: #ff0000;
+            margin-top: 20px;
+        }
+        .table-container {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 10px;
+            max-width: 400px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
         {% if username %}
-        <form method="get" action="/cadastrar_ativo">
-            <p><input type=submit value="Cadastrar Ativos">
-        </form>
-        <form method="get" action="/cadastrar_negociacao">
-            <p><input type=submit value="Cadastrar Negociacoes">
-        </form>
-        <form method="post" action="/listar_ativos">
-            <p><input type=submit value="Ativos">
-        </form>
-        <form method="POST" action="/listar-negociacoes">
-            <p><input type=submit value="Negociacoes">
-        </form>
-        <form method="post" action="/logout">
-            <p><input type=submit value="Sair">
-        </form>
-        <form method="post" action="/delete-user">
-            <p><input type=submit value="Deletar user">
-        </form>
-        <form method="post" action="/editar_users">
-            <p><input type=submit value="Editar user">
-        </form>
-        
-
-        {% else %}
-            <h2>É preciso estar logado para entrar nesta página!</h2>
-        {% endif %}
-
-        {% if msg %}
-            <h5 style="color:#ff0000">{{msg}} </h5>
-        {% endif %}
-
-        {% if ativos %}
-            {% if ativos | length > 0 %}
-            <table>
-                <tr>
-                    <td>Código</td>
-                    <td>Tipo</td>
-                    <td>Descrição</td>
-                    <td>Desde de</td>
-                </tr>
-                {% for ativo in ativos %}
-                    <tr>
-                        <td>{{ ativo.codigo }}</td>
-                        <td>{{ ativo.tipo }}</td>
-                        <td>{{ ativo.descricao }}</td>
-                        <td>{{ ativo.data }}</td>
-                        <form action="/listar_ativos/{{ ativo.id }}" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="submit" value="Deletar Ativo {{ ativo.codigo }}">
-                          </form>
-                          <form action="/editar_ativo/{{ ativo.id }}" method="POST">
-                            <input type="hidden" name="_method" value="Editar">
-                            <input type="submit" value="Editar Ativo {{ ativo.codigo }}">
-                          </form>
-                    </tr>
-                {% endfor %}
-            </table>
+            <h2>Menu Principal</h2>
+            <form method="get" action="/cadastrar_ativo">
+                <input type="submit" value="Cadastrar Ativos">
+            </form>
+            <form method="get" action="/cadastrar_negociacao">
+                <input type="submit" value="Cadastrar Negociações">
+            </form>
+            <form method="post" action="/listar_ativos">
+                <input type="submit" value="Listar Ativos">
+            </form>
+            <form method="POST" action="/listar-negociacoes">
+                <input type="submit" value="Listar Negociações">
+            </form>
+            <form method="post" action="/editar_user">
+                <input type="submit" value="Editar usuario">
+            </form>
+            <form method="post" action="/logout">
+                <input type="submit" value="Sair">
+            </form>
             
+            {% else %}
+                <h2>É preciso estar logado para entrar nesta página!</h2>
             {% endif %}
-        {% else %}
-            <p>Nenhum ativo cadastrado!</p>
-        {% endif %}
-        
-        {% if negociacoes %}
-        {% if negociacoes | length > 0 %} 
-        <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Ativo</th>
-                <th>Quantidade</th>
-                <th>Valor</th>
-                <th>Tipo</th>
-                <th>Data</th>
-                <th>Usuário</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for negociacao in negociacoes %}
-                <tr>
-                  <td>{{ negociacao.id }}</td>
-                  <td>{{ negociacao.ativo_id }}</td>
-                  <td>{{ negociacao.quantidade }}</td>
-                  <td>{{ negociacao.valor }}</td>
-                  <td>{{ negociacao.tipo }}</td>
-                  <td>{{ negociacao.data }}</td>
-                  <td>{{ negociacao.user.username }}</td>
-                </tr>
-                <form action="/listar_negociacoes/{{ negociacao.id }}" method="POST">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Deletar Negociacao {{ negociacao.id }}">
-                  </form>
-                <form action="/editar_negociacao/{{ negociacao.id }}" method="POST">
-                    <input type="hidden" name="_method" value="Editar">
-                    <input type="submit" value="Editar negociacao {{ negociacao.id }}">
-                  </form>
-              {% endfor %}
-              {% endif %}
-              {% else %}
-                  <p>Nenhuma negociacao cadastrada!</p>
-              {% endif %}
-            </tbody>
-          </table>
 
-    
+            {% if msg %}
+                <div class="message">{{msg}}</div>
+            {% endif %}
+            
+            {% if ativos %}
+                {% if ativos | length > 0 %}
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Código</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                            <th>Data</th>
+                        </tr>
+                        {% for ativo in ativos %}
+                            <tr>
+                                <td>{{ ativo.codigo }}</td>
+                                <td>{{ ativo.tipo }}</td>
+                                <td>{{ ativo.descricao }}</td>
+                                <td>{{ ativo.data }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% else %}
+                    <p>Nenhum ativo cadastrado!</p>
+                {% endif %}
+            {% endif %}
+            
+            {% if negociacoes %}
+                {% if negociacoes | length > 0 %}
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ativo</th>
+                            <th>Quantidade</th>
+                            <th>Valor</th>
+                            <th>Tipo</th>
+                            <th>Data</th>
+                            <th>Usuário</th>
+                        </tr>
+                        {% for negociacao in negociacoes %}
+                            <tr>
+                                <td>{{ negociacao.id }}</td>
+                                <td>{{ negociacao.ativo_id }}</td>
+                                <td>{{ negociacao.quantidade }}</td>
+                                <td>{{ negociacao.valor }}</td>
+                                <td>{{ negociacao.tipo }}</td>
+                                <td>{{ negociacao.data }}</td>
+                                <td>{{ negociacao.user.username }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% else %}
+                    <p>Nenhuma negociação cadastrada!</p>
+                {% endif %}
+            {% endif %}
+        </div>
     </body>
 </html>

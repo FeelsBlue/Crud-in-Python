@@ -67,10 +67,14 @@ class User(db.Model):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if 'username' in session:
-        return render_template("gerenciador.html", username=session["username"])
-    
     return render_template("register.html", msg = 'Fazer registro')
+
+
+@app.route('/main', methods=['GET', 'POST'])
+def index3():
+     if 'username' in session:
+        return render_template("gerenciador.html", username=session["username"])
+
 
 @app.route('/al', methods=['GET', 'POST'])
 def index1():
@@ -87,7 +91,7 @@ def login():
                 return redirect('/users')
             else:
                 session['username'] = username
-            return redirect(url_for('index'))
+            return render_template("gerenciador.html", username=session["username"])
         else:
             return render_template("login.html", msg = 'usuario ou senha invalidos ou nao existem')
         
@@ -120,22 +124,27 @@ def list_users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
-@app.route('/editar_users', methods=['GET', 'POST'])
+@app.route('/editar_user', methods=['GET', 'POST'])
 def edit_user_form():
     if 'username' in session:
         username = session['username']
         user = db.session.query(User).filter_by(username=username).first()
         return render_template('edit_user.html', user=user)
+    else:
+        return render_template("login.html")
 
 
 @app.route('/edit-user/<int:id>', methods=['POST'])
 def edit_user(id):
-    user = User.query.get(id)
-    user.username = request.form['username']
-    user.password = request.form['password']
-    db.session.commit()
-    session.pop('username', None)
-    return redirect('/login')
+    if 'username' in session:
+        user = User.query.get(id)
+        user.username = request.form['username']
+        user.password = request.form['password']
+        db.session.commit()
+        session.pop('username', None)
+        return redirect('/login')
+    else:
+        return render_template("login.html")
 
 @app.route('/listar_ativos/<int:id>', methods=['DELETE', 'GET', 'POST'])
 def delete_ativo(id):
@@ -182,7 +191,7 @@ def editar_ativo(id):
     if 'username' in session:
         ativo = Ativo.query.get(id)
         return render_template("edit_ativo.html", ativo=ativo)
-    return redirect(url_for('index'))
+    
 
 
 @app.route('/edit-ativo/<int:id>', methods=['POST'])
@@ -201,7 +210,7 @@ def edit_ativo(id):
 def cadastrar_ativo():
     if 'username' in session:
         return render_template("cadastro_ativo.html", username=session["username"])
-    return redirect(url_for('index'))
+    
 
 
 @app.route("/salvar_ativo", methods=["POST"])
@@ -224,7 +233,7 @@ def listar_ativos():
         query = db.session.query(Ativo).all()
         for ativo in query:
             ativos.append(ativo)
-        return render_template("gerenciador.html", ativos=ativos, username=session["username"])
+        return render_template("listar_ativos.html", ativos=ativos, username=session["username"])
     return redirect(url_for('index'))
 
 
@@ -257,7 +266,7 @@ def list_negociacoes():
     username = session['username']
     user = User.query.filter_by(username=username).first()
     negociacoes = Negociacao.query.filter_by(user_id=user.id).all()
-    return render_template("gerenciador.html", negociacoes=negociacoes, username=session["username"])
+    return render_template("listar_negociacoes.html", negociacoes=negociacoes, username=session["username"])
     
 
 @app.route("/editar_negociacao/<int:id>", methods=["GET", "POST"])
@@ -302,6 +311,7 @@ if __name__ == '__main__':
            db.create_all()
         except:
             db.session.rollback() 
+    
        
     app.run(debug=True)
 
