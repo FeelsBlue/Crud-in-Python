@@ -105,61 +105,7 @@
                 <div class="message">{{msg}}</div>
             {% endif %}
             
-            {% if ativos %}
-                {% if ativos | length > 0 %}
-                <div class="table-container">
-                    <table>
-                        <tr>
-                            <th>Código</th>
-                            <th>Tipo</th>
-                            <th>Descrição</th>
-                            <th>Data</th>
-                        </tr>
-                        {% for ativo in ativos %}
-                            <tr>
-                                <td>{{ ativo.codigo }}</td>
-                                <td>{{ ativo.tipo }}</td>
-                                <td>{{ ativo.descricao }}</td>
-                                <td>{{ ativo.data }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-                {% else %}
-                    <p>Nenhum ativo cadastrado!</p>
-                {% endif %}
-            {% endif %}
             
-            {% if negociacoes %}
-                {% if negociacoes | length > 0 %}
-                <div class="table-container">
-                    <table>
-                        <tr>
-                            <th>ID</th>
-                            <th>Ativo</th>
-                            <th>Quantidade</th>
-                            <th>Valor</th>
-                            <th>Tipo</th>
-                            <th>Data</th>
-                            <th>Usuário</th>
-                        </tr>
-                        {% for negociacao in negociacoes %}
-                            <tr>
-                                <td>{{ negociacao.id }}</td>
-                                <td>{{ negociacao.ativo_id }}</td>
-                                <td>{{ negociacao.quantidade }}</td>
-                                <td>{{ negociacao.valor }}</td>
-                                <td>{{ negociacao.tipo }}</td>
-                                <td>{{ negociacao.data }}</td>
-                                <td>{{ negociacao.user.username }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-                {% else %}
-                    <p>Nenhuma negociação cadastrada!</p>
-                {% endif %}
-            {% endif %}
         </div>
     </body>
 </html>

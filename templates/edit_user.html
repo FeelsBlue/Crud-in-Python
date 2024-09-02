@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Ativo Financeiro</title>
+    <title>Editando Usuário</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,17 +47,12 @@
             font-weight: bold;
         }
 
-        .field input[type="text"], .field input[type="date"], .field textarea, .field select {
+        .field input[type="text"], .field input[type="password"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
-        }
-
-        .field textarea {
-            resize: vertical;
-            height: 80px;
         }
 
         .action {
@@ -104,16 +99,27 @@
 <body>
 
     <div class="container">
-        <title>Editando Usuario</title>
-    </head>
-    <body>
+        <h3>Editando Usuário</h3>
         <form action="/edit-user/{{ user.id }}" method="POST">
-            <input type="hidden" name="id" value="{{ user.id }}">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username" value="{{ user.username }}"><br>
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" value="{{ user.password }}"><br><br>
-            <input type="submit" value="Salvar">
-          </form> 
-    </body>
+            <div class="field">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" value="{{ user.password }}" required>
+            </div>
+            <div class="action">
+                <input type="submit" value="Salvar">
+            </div>
+        </form>
+
+        <div class="back-button">
+            <form method="GET" action="/main">
+                <input type="submit" value="Voltar">
+            </form>
+        </div>
+    </div>
+
+</body>
 </html>
